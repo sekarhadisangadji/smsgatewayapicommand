@@ -56,26 +56,29 @@ class SmsApi extends Command
             $this->line('kirim pesan menggunakan TXTLOCAL API');
 
             $nomor_telepon = $this->ask('masukkan nomor telepon tujuan ?');
-
-            $pesan = $this->ask('masukkan pesan sms kepada '.$nomor_telepon.' ?');
-            if ($this->confirm('apakah anda yakin sudah benar ? [y|N]')) {
-                $apiKey = urlencode($ApiKey);
-                // Message details
-                $numbers = urlencode($nomor_telepon);
-                $sender = urlencode($SenderName);
-                $message = rawurlencode($pesan);
-                // Prepare data for POST request
-                $data = 'apikey=' . $apiKey . '&numbers=' . $numbers . "&sender=" . $sender . "&message=" . $message;
-                // Send the GET request with cURL
-                $ch = curl_init('https://api.txtlocal.com/send/?' . $data);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                $response = curl_exec($ch);
-                curl_close($ch);
-                // Process your response here
-                echo $response;
-                //  http://api.txtlocal.com/docs/sendsms
+            if(!ctype_digit($nomor_telepon)) {
+                $this->line('nomor telepon harus digit');
             } else {
-                $this->line('anda membatalkan pengiriman sms kepada '.$nomor_telepon.'.'); 
+                $pesan = $this->ask('masukkan pesan sms kepada '.$nomor_telepon.' ?');
+                if ($this->confirm('apakah anda yakin sudah benar ? [y|N]')) {
+                    $apiKey = urlencode($ApiKey);
+                    // Message details
+                    $numbers = urlencode($nomor_telepon);
+                    $sender = urlencode($SenderName);
+                    $message = rawurlencode($pesan);
+                    // Prepare data for POST request
+                    $data = 'apikey=' . $apiKey . '&numbers=' . $numbers . "&sender=" . $sender . "&message=" . $message;
+                    // Send the GET request with cURL
+                    $ch = curl_init('https://api.txtlocal.com/send/?' . $data);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $response = curl_exec($ch);
+                    curl_close($ch);
+                    // Process your response here
+                    echo $response;
+                    //  http://api.txtlocal.com/docs/sendsms
+                } else {
+                    $this->line('anda membatalkan pengiriman sms kepada '.$nomor_telepon.'.'); 
+                }
             }
         }
         
