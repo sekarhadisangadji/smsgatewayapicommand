@@ -53,7 +53,7 @@ class SmsApi extends Command
             $this->line('TXTLOCAL API KEY masih kosong di file .env, silahkan diisi.'); 
         } else
         {
-            $this->line('kirim pesan menggunakan TXTLOCAL API');
+            $this->line('kirim pesan menggunakan TXTLOCAL API | document http://api.txtlocal.com/docs/sendsms ');
 
             $nomor_telepon = $this->ask('masukkan nomor telepon tujuan ?');
             if(!ctype_digit($nomor_telepon)) {
@@ -74,7 +74,7 @@ class SmsApi extends Command
                     $response = curl_exec($ch);
                     curl_close($ch);
                     // Process your response here
-                    echo $response;
+                    dd($response);
                     //  http://api.txtlocal.com/docs/sendsms
                 } else {
                     $this->line('anda membatalkan pengiriman sms kepada '.$nomor_telepon.'.'); 
